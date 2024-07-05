@@ -82,9 +82,6 @@ export const SignupForm = () => {
     );
   };
   
-
-
-
 export const LoginForm = () => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const LoginSubmit = async (email, senha) => {
