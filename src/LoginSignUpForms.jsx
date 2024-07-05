@@ -14,11 +14,6 @@ const validatePassword = (callback) => async (event) =>
       : alert("Sua senha não é válida no sistema")
     : alert("Sua senha deve ter pelo menos 6 caracteres");
 
-const validateEmailFromForm = (callback) => (value) => 
-  isValidEmail(value)? 
-  callback(value): 
-  alert('Email inválido')
-
 export const SignupForm = () => {
   
     const [email, setEmail] = React.useState("");
@@ -84,7 +79,8 @@ export const SignupForm = () => {
   
 export const LoginForm = () => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const LoginSubmit = async (email, senha) => {
+    const LoginSubmit = ({email, senha}) => {
+      console.log(email, senha, auth)
       signInWithEmailAndPassword(auth, email, senha)
       .then(sucess => {
         Manager.setProperty('user', sucess.user)
@@ -106,7 +102,7 @@ export const LoginForm = () => {
         defaultValue={localStorage.getItem("senha") || ''}
         name="senha"
         placeholder="Senha"
-        {...register("password", { required: true })}
+        {...register("senha", { required: true })}
         />
         <Button type="submit">
           Login
