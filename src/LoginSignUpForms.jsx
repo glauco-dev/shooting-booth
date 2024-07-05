@@ -1,26 +1,36 @@
 import React from "react";
 import { Box, Button, Img, Input } from "@chakra-ui/react";
-import {validatePassword as vpwdFB,
+import {signInWithEmailAndPassword, validatePassword as vpwdFB,
   } from "firebase/auth";
 import { HiMiniUserCircle } from "react-icons/hi2";
-import db from './Manager';
+import Manager, { auth } from './Manager';
+import {useForm} from 'react-hook-form';
+
+const isValidEmail = (emailString) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailString)
+const validatePassword = (callback) => async (event) =>
+  event.target.value.length >= 6
+    ? (await vpwdFB(getAuth(), event.target.value)).isValid
+      ? callback(event.target.value)
+      : alert("Sua senha não é válida no sistema")
+    : alert("Sua senha deve ter pelo menos 6 caracteres");
+
+const validateEmailFromForm = (callback) => (value) => 
+  isValidEmail(value)? 
+  callback(value): 
+  alert('Email inválido')
 
 export const SignupForm = () => {
+  
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [name, setName] = React.useState("");
     const [image, setImage] = React.useState(null);
     const photoUpRef = React.useRef(null);
     const validateEmail = (event) =>
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(event.target.value)
+        isValidEmail(event.target.value)
         ? setEmail(event.target.value)
         : alert("You have entered an invalid email address!");
-    const validatePassword = async (event) =>
-      event.target.value.length >= 6
-        ? (await vpwdFB(getAuth(), event.target.value)).isValid
-          ? setPassword(event.target.value)
-          : alert("Sua senha não é válida no sistema")
-        : alert("Sua senha deve ter pelo menos 6 caracteres");
+    
   
     const FileUploader = () => (
       <Box className="profileImage" >
@@ -47,7 +57,10 @@ export const SignupForm = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Input type="text" required value={name} name="name" placeholder="name" />
+        <Input type="text" 
+          required value={name} 
+          onBlur={(ev) => setName(ev.target.value)} 
+          name="name" placeholder="name" />
   
         <FileUploader />
         <Input
@@ -69,31 +82,39 @@ export const SignupForm = () => {
     );
   };
   
+
+
+
 export const LoginForm = () => {
-
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-
-    db.readLocalProperty("email").then((email) => setEmail(email))
-    db.readLocalProperty("password").then((password) => setPassword(password))
-
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const LoginSubmit = async (email, senha) => {
+      signInWithEmailAndPassword(auth, email, senha)
+      .then(sucess => {
+        Manager.setProperty('user', sucess.user)
+      })
+      .catch(err => console.log(err))
+    }
     return (
     <Box p={4} borderWidth="1px" borderRadius="lg" overflow="hidden">
+      <form onSubmit={handleSubmit(LoginSubmit)}>
         <Input
         type="email"
-        value={email}
-        onChange={() => db.set("email", email)}
+        defaultValue={localStorage.getItem("email") || ''}
         name="email"
         placeholder="Email"
+        {...register("email", { required: true })}
         />
         <Input
         type="password"
-        value={password}
-        onChange={() => db.set("password", password)}
-        name="password"
+        defaultValue={localStorage.getItem("senha") || ''}
+        name="senha"
         placeholder="Senha"
+        {...register("password", { required: true })}
         />
-        <Button value="Login" />
+        <Button type="submit">
+          Login
+        </Button>
+      </form>
     </Box>
     );
 };

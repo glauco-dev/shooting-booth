@@ -6,10 +6,8 @@ import {
   
 import { onSnapshot, getFirestore, doc, collection } from 'firebase/firestore';
 
-import { openDB } from "idb";
-
 const DBCollections = ["campeonatos", "membros", "squads", "pistas"];
-const auth = getAuth(firebaseimport);
+export const auth = getAuth(firebaseimport);
 class Manager { 
   constructor(user) {
     const baseState = {
@@ -20,10 +18,6 @@ class Manager {
       user: [],
       loginForm: [],
     }
-    openDB("shooting-booth", 1)
-    .then((db) => {
-      this.localDb = db;
-    })
     this.state = DBCollections.reduce((acc, cur) => ({ ...acc, [cur]: null }), baseState);
     this.listeners = DBCollections.reduce((acc, cur) => ({ ...acc, [cur]: [] }), baseListeners);
     const onSnapsFac = ( listOfCollections ) => 
@@ -46,17 +40,11 @@ class Manager {
 
   setStateProperty(property, value) {
     this.state[property] = value;
-    this.listeners[property].forEach(listener => listener(this.state));
+    this.listeners[property].forEach(listener => listener(value));
   }
 
-  setLocalProperty(property, value) {
-    this.localDb.set(property, value);
-  }
-  readLocalProperty(property) {
-    return this.localDb.get(property);
-  }
   setProperty(property, value) {
-    this.setLocalProperty(property, value);
+    localStorage.setItem(property, JSON.stringify(value));
     this.setStateProperty(property, value);
   }
 }

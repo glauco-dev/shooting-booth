@@ -2,3 +2,4 @@
 
 Estado de desenvolvimento: Inicial
 - Integração login signup forms to manager
+- auth/network-request-failed issue
