@@ -35,18 +35,22 @@ const Campeonato = ({campeonato}) => {
                     <TableCaption>Squads do campeonato: {campeonato.nome}</TableCaption>
                     <Thead>
                         <Tr>
-                            <Th>Squad</Th>
-                            <Th>Capitães</Th>
+                            <Th>Pista</Th>
+                            <Th>Localização</Th>
+                            <Th>Nº Alvos</Th>
+                            <Th>Squads participando</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {campeonato.squads.map(squad =>
-                            <Tr key={squad.id}
-                                // Levar para a pagina de pontuações
-                                // onClick={() => setSquad(squad)}
+                        {campeonato.pistas.map(pista =>
+                            <Tr key={pista.id}
+                                // Levar para a pagina de pista
+                                // onClick={() => setShowPista(pista)}
                                 >
-                                <Td>{squad.nome}</Td>
-                                <Td>{squad.capitao}</Td>
+                                <Td>{pista.nome}</Td>
+                                <Td>{pista.localizacao}</Td>
+                                <Td>{pista.alvos.length} Alvos</Td>
+                                <Td>{pista.squads.length} Squads</Td>
                             </Tr>
                         )}
                     </Tbody>

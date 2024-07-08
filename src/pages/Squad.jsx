@@ -12,9 +12,9 @@ export default ({pista,squad}) => {
     return <Tabs>
     <TabList>
         <Tab>Detalhes</Tab>
-      {Manager.state['user'] && membros.map(membro => {
-        return <Tab key={membro.id}>{membro.nome}</Tab>
-      })}
+        {Manager.state['user'].id === squad.capitao && membros.map(membro => {
+            return <Tab key={membro.id}>{membro.nome}</Tab>
+        })}
     </TabList>
   
     <TabPanels>
@@ -26,7 +26,7 @@ export default ({pista,squad}) => {
       </TabPanel>
         {membros.map(membro => 
             <TabPanel>
-            <PontuacaoDeMembro key={membro.id} pista={pista} squad={squad} membro={membro} />)
+                <PontuacaoDeMembro key={membro.id} pista={pista} squad={squad} membro={membro} />)
             </TabPanel>
         )}
     </TabPanels>
