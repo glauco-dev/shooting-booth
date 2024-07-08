@@ -7,7 +7,7 @@ import {
 import { onSnapshot, getFirestore, doc, collection, getDoc, getDocs, query, addDoc } from 'firebase/firestore';
 import {getDownloadURL, getStorage, ref} from 'firebase/storage';
 
-const DBCollections = ["campeonatos", "membros", "squads", "pistas"];
+const DBCollections = ["campeonatos", "membros", "squads", "pistas", "pontuação"];
 export const auth = getAuth(firebaseimport);
 class Manager { 
   constructor(user) {

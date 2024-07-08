@@ -40,3 +40,12 @@ export type Squad = {
     campeonato: string,
     bg_banner: string,
 }
+
+export type Membro = {
+    id: string,
+    nome: string,
+    foto: string,
+    email: string,
+    nascimento: Date,
+    contatos: string[],
+}

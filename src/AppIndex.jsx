@@ -18,14 +18,14 @@ export const Pages = [
 ];
 export default () => {
     const [user, setUser] = React.useState(Manager.state['user']);
-    const [pageIndex, setPageIndex] = React.useState(0);
+    const [pageIndex, setPageIndex] = React.useState(1);
 
     Manager.subscribe('user', async (userData) =>setUser(userData));
 
     return user ? (
         <Box display={'grid'}>
             <NavigationDrawer userInfo={user} logout={() => Manager.logout()} />
-            <Tabs isFitted variant='enclosed' id="tabsNav">
+            <Tabs isFitted variant='enclosed' id="tabsNav" index={pageIndex}>
                 <TabPanels>
                     {Pages.map((page, index) => (
                         <TabPanel className="page" p={0} key={index}>

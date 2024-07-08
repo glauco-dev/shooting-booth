@@ -7,13 +7,13 @@ import Manager from '../Manager';
 import PontuacaoDeMembro from './Pontuacao';
 
 export default ({pista,squad}) => {
-    let membros = squad.membros.map(membroId => Manager.state['membros'][membroId]);
-
+    let membros = squad.membros.map(membroId => Manager.state['membros'].find(membro => membroId === membro.id));
+    console.log(membros)
     return <Tabs>
     <TabList>
         <Tab>Detalhes</Tab>
         {Manager.state['user'].id === squad.capitao && membros.map(membro => {
-            return <Tab key={membro.id}>{membro.nome}</Tab>
+            return <Tab key={membro.id+"tabUser"}>{membro.nome}</Tab>
         })}
     </TabList>
   
@@ -25,8 +25,8 @@ export default ({pista,squad}) => {
         </List>
       </TabPanel>
         {membros.map(membro => 
-            <TabPanel>
-                <PontuacaoDeMembro key={membro.id} pista={pista} squad={squad} membro={membro} />)
+            <TabPanel key={membro.id+"tabPanel"}>
+                <PontuacaoDeMembro  pista={pista} squad={squad} membro={membro} />)
             </TabPanel>
         )}
     </TabPanels>
