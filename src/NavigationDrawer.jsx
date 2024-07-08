@@ -7,7 +7,7 @@ export default ({userInfo, logout}) => {
     const btnRef = React.useRef();
     
     return(
-        <><Button ref={btnRef} bg="transparent" right={0} onClick={onOpen}>
+        <><Button position={"sticky"} top={0} marginLeft={"auto"} zIndex={100} ref={btnRef} bg="transparent" right={0} onClick={onOpen}>
             <HamburgerIcon />
         </Button><Drawer
             isOpen={isOpen}

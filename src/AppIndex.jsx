@@ -7,6 +7,7 @@ import {SettingsIcon, AtSignIcon, EditIcon} from "@chakra-ui/icons";
 import CampeonatosPage from './pages/CampeonatosPage';
 import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
+import "./App.sass";
 
 export const Pages = [
     {component: CampeonatosPage, icon: <EditIcon/>},
@@ -20,12 +21,12 @@ export default () => {
     Manager.subscribe('user', async (userData) =>setUser(userData));
 
     return user ? (
-        <Box>
+        <Box display={'grid'}>
             <NavigationDrawer userInfo={user} logout={() => Manager.logout()} />
-            <Tabs isFitted variant='enclosed'>
+            <Tabs isFitted variant='enclosed' id="tabsNav">
                 <TabPanels>
                     {Pages.map((page, index) => (
-                        <TabPanel p={0} key={index}>
+                        <TabPanel className="page" p={0} key={index}>
                             <page.component />
                         </TabPanel>
                     ))}

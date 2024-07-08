@@ -3,7 +3,7 @@ import manager from './Manager';
 import "./AppShell.sass";
 import { LoginForm, SignupForm } from "./LoginSignUpForms";
 import { ChakraProvider } from '@chakra-ui/react'
-import App from './App'
+import App from './AppIndex'
 
 export default () => {
   const [user, changeUser] = React.useState('');

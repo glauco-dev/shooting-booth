@@ -4,7 +4,7 @@ import {
     onAuthStateChanged,
   } from "firebase/auth";
   
-import { onSnapshot, getFirestore, doc, collection, getDoc, getDocs, query } from 'firebase/firestore';
+import { onSnapshot, getFirestore, doc, collection, getDoc, getDocs, query, addDoc } from 'firebase/firestore';
 import {getDownloadURL, getStorage, ref} from 'firebase/storage';
 
 const DBCollections = ["campeonatos", "membros", "squads", "pistas"];
@@ -41,6 +41,10 @@ class Manager {
     
   }
 
+  digestSquadsProgression() {
+    //TODO
+  }
+
   subscribe(property, listener) {
     this.listeners[property].push(listener);
   }
@@ -59,6 +63,9 @@ class Manager {
     auth.signOut();
     this.setProperty("user", null);
   }
+  
 }
+
+
 
 export default new Manager(auth.currentUser);
