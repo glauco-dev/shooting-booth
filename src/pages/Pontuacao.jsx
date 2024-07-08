@@ -34,6 +34,11 @@ export default ({membro, pista, squad}) => {
     return  membroPontuacao && <>
             <FormControl>
                 <FormLabel>Alvos</FormLabel>
+                {/* 
+                Criar um carrousel de alvos para pontuação:
+                - Será uma lista formada da lista de alvos da pista,
+                - Cada acionamento de botão vai na verdade preencher a pontuação do alvo e passar para o próximo
+                - Será uma tab list */}
                 <Box display={'grid'} gridTemplateAreas={"'a c d'"} gap={2}>
                     {Object.keys(AlvosTipos).map(key => {
                     const [alreadyClicked, set] = useState(false)
@@ -48,12 +53,6 @@ export default ({membro, pista, squad}) => {
                                 }
                                 > 
                                 {key}
-                                {membroPontuacao[key]>0 && <Badge colorScheme='green'>
-                                    {/* {membroPontuacao[key]}/
-                                    {pista.alvos.reduce(
-                                        (a, b) => a + b.pontos.filter(p => p === key).length, 
-                                    ) } */}
-                                </Badge>}
                         </Button>
                     })}
                 </Box>
