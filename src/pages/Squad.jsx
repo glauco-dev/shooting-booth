@@ -13,7 +13,7 @@ export default ({pista,squad}) => {
     <TabList>
         <Tab>Detalhes</Tab>
         {Manager.state['user'].id === squad.capitao && membros.map(membro => {
-            return <Tab key={membro.id+"tabUser"}>{membro.nome}</Tab>
+            return <Tab key={membro.id+"tabUser"}>{membro.apelido}</Tab>
         })}
     </TabList>
   

@@ -28,6 +28,8 @@ export const AlvosTipos = {
     "Charlie": 5,
     "Delta": 1,
     "No Shoot": -10,
+    "Plate": 10,
+    "Bailarina": 10,
     "Miss": 0,
 }
 

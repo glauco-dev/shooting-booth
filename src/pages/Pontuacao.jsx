@@ -1,16 +1,15 @@
 // Página de pontuação de cada membro indivualmente
-import React, { useEffect } from 'react';
-import { FormControl, FormLabel, Input, FormHelperText, Button, Box } from '@chakra-ui/react';
+import React, { useEffect, useRef, useState } from 'react';
+import { FormControl, FormLabel, Input, FormHelperText, Button, Box, Badge } from '@chakra-ui/react';
 import Manager from '../Manager';
 import { addDoc, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
-import { useLongPress } from 'use-long-press';
 import { AlvosTipos } from '../Models';
 
 export default ({membro, pista, squad}) => {
     const ConfirmPontuacao = async () => {
         let {procs, decays, tempo} = membroPontuacao;
-        let pontos = membroPontuacao.alfas + membroPontuacao.charlies + membroPontuacao.deltas - membroPontuacao.noShots;
-        let result = await setDoc(doc(Manager.db, 'pontuação', pontuacaoRef.id), {
+        let pontos = Object.keys(AlvosTipos).reduce((a, b) => a + (membroPontuacao[b]*AlvosTipos[b]), 0);
+        setDoc(doc(Manager.db, 'pontuação', pontuacaoRef.id), {
             membro: membro.id,
             squad: squad.id,
             pista: pista.id,
@@ -21,34 +20,42 @@ export default ({membro, pista, squad}) => {
             hitfactor: pontos/tempo,
             id:pontuacaoRef.id
         });
-        console.log(result);
     };
     let pontuacaoRef = doc(collection( Manager.db, 'pontuação')) ;
-    const [membroPontuacao, setMembrosPontuacao] = React.useState({
-        tempo: 0,
-        alfas: 0,
-        charlies: 0,
-        deltas: 0,
-        noShots: 0,
-        misses: 0,
-        decays: 0,
-        procs: 0,
-    });
-    const handleAlvoInc = (prop, incDecr) => () => setMembrosPontuacao({...membroPontuacao, [prop]: membroPontuacao[prop] + incDecr? -1 : 1})
 
+    const [membroPontuacao, setMembrosPontuacao] = React.useState(
+        Object.keys(AlvosTipos).reduce((a, b) => ({...a, [b]: 0}), {
+            tempo: 0,
+            misses: 0,
+            decays: 0,
+        }),
+    );
     
     return  membroPontuacao && <>
             <FormControl>
                 <FormLabel>Alvos</FormLabel>
-                <Box display={'grid'} gap={2}>
+                <Box display={'grid'} gridTemplateAreas={"'a c d'"} gap={2}>
                     {Object.keys(AlvosTipos).map(key => {
-                        return <Button key={'addPts'+key} 
-                            {... useLongPress(() => handleAlvoInc(AlvosTipos[key], true))()} 
-                            onClick={handleAlvoInc(AlvosTipos[key], false)}>
+                    const [alreadyClicked, set] = useState(false)
+                        return <Button height={'40px'} key={'addPts'+key} 
+                                onClick={ (env) => {
+                                    alreadyClicked? 
+                                        setMembrosPontuacao({...membroPontuacao, [key]: membroPontuacao[key] - 1})
+                                    :   setMembrosPontuacao({...membroPontuacao, [key]: membroPontuacao[key] + 1})
+                                    set(true);
+                                    setTimeout(() => set(false), 400);
+                                    }
+                                }
+                                > 
                                 {key}
-                            </Button>
+                                {membroPontuacao[key]>0 && <Badge colorScheme='green'>
+                                    {/* {membroPontuacao[key]}/
+                                    {pista.alvos.reduce(
+                                        (a, b) => a + b.pontos.filter(p => p === key).length, 
+                                    ) } */}
+                                </Badge>}
+                        </Button>
                     })}
-                
                 </Box>
                 <FormLabel>Extras</FormLabel>
                 <Box display={'grid'} gap={2}>
