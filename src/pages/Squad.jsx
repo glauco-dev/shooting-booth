@@ -24,11 +24,12 @@ export default ({pista,squad}) => {
             <li>Pista: {pista.nome}</li>
         </List>
       </TabPanel>
-        {membros.map(membro => 
-            <TabPanel key={membro.id+"tabPanel"}>
-                <PontuacaoDeMembro  pista={pista} squad={squad} membro={membro} />)
-            </TabPanel>
-        )}
+        {membros.map(membro => {
+          console.log('Member rendering tabpanel called',membro);
+          return <TabPanel key={membro.id+"tabPanel"}>
+              <PontuacaoDeMembro  pista={pista} squad={squad} membro={membro} />)
+          </TabPanel>
+        })}
     </TabPanels>
   </Tabs>
 }
