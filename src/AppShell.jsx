@@ -11,7 +11,7 @@ export default () => {
   const [whichForm, setWhichForm] = React.useState(true);
   manager.subscribe("loginForm", setWhichForm);
 
-  console.log(user);
+  console.log(JSON.stringify(user));
   
   return <ChakraProvider>
     {

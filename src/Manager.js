@@ -21,15 +21,15 @@ class Manager {
     }
     this.state = DBCollections.reduce((acc, cur) => ({ ...acc, [cur]: null }), baseState);
     this.listeners = DBCollections.reduce((acc, cur) => ({ ...acc, [cur]: [] }), baseListeners);
-    const onSnapsFac = ( listOfCollections ) => 
-      listOfCollections.map( collectionName => onSnapshot( query(collection(this.db, collectionName)) , 
-      (snapshot) => {
-        !snapshot.empty? this.setProperty(collectionName, snapshot.docs.map(doc => doc.data())) : null;
-      }))
       
     this.db = getFirestore(firebaseimport);
 
-    onSnapsFac( DBCollections );
+    DBCollections.map( collectionName => onSnapshot( query(collection(this.db, collectionName)) , 
+      (snapshot) => {
+        console.log(collectionName, snapshot.docs.map(doc => doc.data()))
+        !snapshot.empty? this.setProperty(collectionName, snapshot.docs.map(doc => doc.data())) : null;
+      }));
+
     onAuthStateChanged(auth, async (user) => {
       let userFind = (await getDoc(doc(collection(this.db, "membros"), user.uid))).data();
       console.log(user, userFind)
@@ -40,16 +40,12 @@ class Manager {
     })
     
   }
-
-  digestSquadsProgression() {
-    //TODO
-  }
-
   subscribe(property, listener) {
     this.listeners[property].push(listener);
   }
 
   setStateProperty(property, value) {
+    console.log(property, value)
     this.state[property] = value;
     this.listeners[property]?.forEach(listener => listener(value));
   }
