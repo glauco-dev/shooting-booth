@@ -17,13 +17,21 @@ export type Pista = {
     nome: string,
     alvos: {
         icone: string,
-        pontos: keyof typeof AlvosTipos[]
+        type: keyof typeof AlvosTipos,
     }[],
     localizacao: string,
     membrosIncluidos: string[],
 }
 
 export const AlvosTipos = {
+    // estrutura de exemplo para os tipos de alvos e seus conteúdos
+    "Static": [0, 0], // pontos possíveis de alvos staticos
+    "Plate": false,
+    "No Shoot": false, // se acertou o no shoot ou não
+    "Bailarina": [0, 0], // pontos possíveis de bailarina
+}
+
+export const TiposPontos = {
     "Alpha": 10,
     "Charlie": 5,
     "Delta": 1,
